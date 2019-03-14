@@ -5,7 +5,7 @@
   DNB Open Banking Client
 </h1>
 
-<h4 align="center">A Dart client for DNB's API products. (Under development, may change)</h4>
+#### A Dart client for DNB's API products. (Under development, may change)
 
 
 <p align="center">

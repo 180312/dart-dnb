@@ -34,17 +34,17 @@ class DNB {
     });
     request.headers.addAll({'x-api-key': apiKey});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           this.jwt = json.decode(response.body)['tokenInfo'][0]['jwtToken'];
           return jwt;
         } catch (e) {
-          throw Exception('Failed to parse response body.\n$e');
+          throw ('Failed to parse response body.\n$e');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Returns the list of DNB accounts for the current customer.
@@ -53,16 +53,16 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes))['accounts'];
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Takes an [account] and returns the account details.
@@ -73,16 +73,16 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Takes an [account] and returns the balance of given account.
@@ -93,16 +93,16 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Returns a list of all the credit and debit cards registered in DNB
@@ -112,16 +112,16 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Takes a card's [id] and returns the card details.
@@ -130,16 +130,16 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Takes a credit card's [id] and returns the balance of given card.
@@ -151,18 +151,18 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
-
+  /// ### DNB's APIs does not support this yet.
   /// Takes a card's [id] and applies a soft-block (not including Cresco Cards).
   /// This operation is only allowed where `cardStatus` is `Active` and
   /// `blockAllowed` is `true`.
@@ -172,18 +172,19 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await post(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
+  /// ### DNB's APIs does not support this yet.
   /// Unblocks the debit card provided by [id] from a "soft block",
   /// where `cardStatus` is `Blocked` and `unblockAllowed` is `true`.
   Future<dynamic> unblockCard({@required String id, String jwt}) async {
@@ -192,16 +193,16 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await post(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// ### [NOTE] Only NOK is available at the time.
@@ -212,16 +213,16 @@ class DNB {
         Sigv4Request(client, method: 'GET', path: '/currencies/$fromCurrency');
     request.headers.addAll({'x-api-key': apiKey});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// ### [NOTE] the [fromCurrency] parameter only supports NOK at the moment.
@@ -233,16 +234,16 @@ class DNB {
         method: 'GET', path: '/currencies/$fromCurrency/convert/$toCurrency');
     request.headers.addAll({'x-api-key': apiKey});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// ### NOTE Currently DNB's APIs only covers retail customers.
@@ -253,16 +254,16 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Returns a list of all the DNB branches.
@@ -271,16 +272,16 @@ class DNB {
         Sigv4Request(client, method: 'GET', path: '/locations/branches');
     request.headers.addAll({'x-api-key': apiKey});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Returns contact information, opening hours, etc for a specific branch.
@@ -289,21 +290,21 @@ class DNB {
         Sigv4Request(client, method: 'GET', path: '/locations/branches/$id');
     request.headers.addAll({'x-api-key': apiKey});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           // Response is somewhow an array of 1 item,
           // but we're interested in the object
           return json.decode(utf8.decode(response.bodyBytes))[0];
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
-  /// ### [NOTE] Not functional from DNB's end at the moment.
+  /// ### DNB's APIs does not support this yet.
   Future<dynamic> findNearestBranchByAddress({@required String address}) async {
     final request = Sigv4Request(client,
         method: 'POST',
@@ -311,18 +312,18 @@ class DNB {
         queryParams: {'address': address});
     request.headers.addAll({'x-api-key': apiKey});
     return await post(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           // Response is somewhow an array of 1 item,
           // but we're interested in the object
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Returns an list of [branches], as there may be more than one
@@ -335,16 +336,16 @@ class DNB {
         queryParams: {'longitude': '$longitude', 'latitude': '$latitude'});
     request.headers.addAll({'x-api-key': apiKey});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Returns a list of all DNB ATMs
@@ -353,16 +354,16 @@ class DNB {
         Sigv4Request(client, method: 'GET', path: '/locations/atms');
     request.headers.addAll({'x-api-key': apiKey});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Returns a list of [atm], as there may be more than one
@@ -375,18 +376,19 @@ class DNB {
         queryParams: {'longitude': '$longitude', 'latitude': '$latitude'});
     request.headers.addAll({'x-api-key': apiKey});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
+  /// ### DNB's APIs does not support this yet.
   /// Initiates a domestic payment going directly from a DNB account with KID
   /// or message. Also allows for transfers. The receiving account can be in
   /// whichever bank, but for domestic payments it has to be a Norwegian one.
@@ -409,18 +411,19 @@ class DNB {
     });
     return await post(request.url, headers: request.headers, body: request.body)
         .then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
+  /// ### DNB's APIs does not support this yet.
   /// Deletes a due payment for an DNB account by provided [id].
   Future<dynamic> deletePayment(
       {@required String account, @required String id, String jwt}) async {
@@ -429,18 +432,19 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await post(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
+  /// ### DNB's APIs does not support this yet.
   /// Updates a due payment on an account. A due [payment] can be
   /// updated until its due date. Returns the updated [payment].
   /// These paramaters may be changed:
@@ -458,16 +462,16 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await post(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Takes an [account] and returns a list of the due payments.
@@ -481,16 +485,16 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Takes a payment [id] and returns the payment details.
@@ -501,16 +505,16 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes));
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Returns a list of the currently available fictitious sanbox customers
@@ -519,16 +523,16 @@ class DNB {
     final request = Sigv4Request(client, method: 'GET', path: '/testCustomers');
     request.headers.addAll({'x-api-key': apiKey});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes))['customers'];
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Takes an [account], a [fromDate] and a [toDate] and returns
@@ -551,16 +555,16 @@ class DNB {
     request.headers
         .addAll({'x-api-key': apiKey, 'x-dnbapi-jwt': jwt ?? this.jwt});
     return await get(request.url, headers: request.headers).then((response) {
-      if (response.statusCode >= 200 && response.statusCode <= 300) {
+      if (response.statusCode < 400) {
         try {
           return json.decode(utf8.decode(response.bodyBytes))['transactions'];
         } catch (e) {
-          throw Exception('Failed to parse response body.\n${e}');
+          throw ('Failed to parse response body.\n${e}');
         }
       } else {
-        throw Exception('HTTP${response.statusCode}: ${response.reasonPhrase}');
+        throw ('HTTP${response.statusCode}: ${response.reasonPhrase}');
       }
-    }).catchError((e) => throw Exception(e));
+    }).catchError((e) => throw (e));
   }
 
   /// Returns a JSON string representing payment details, provided
